@@ -4,8 +4,12 @@ import org.apache.log4j.Logger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -50,6 +54,20 @@ public class Test01 {
         System.out.println(cnDateToEn(dtStr3));
         System.out.println(cnDateToEn(dtStr4));
 
+
+        // 正则提取
+        String text = "abc10de178fg6";
+        System.out.println(getRegexStr(text, "[0-9]+", 0));
+        System.out.println(getRegexStr(text, "[0-9]+", 1));
+
+        String text1 = "abc(10)de(8,5)";
+        System.out.println(getRegexStr(text1, "\\([0-9,]*\\)", 0));
+        System.out.println(getRegexStr(text1, "\\([0-9,]*\\)", 1));
+
+        String text2 = "Today is 2024-11-16, tomorrow is 2024-11-17.";
+        System.out.println(getRegexStr(text2, "(\\d{4})-(\\d{2})-(\\d{2})", 0));
+        System.out.println(getRegexStr(text2, "(\\d{4})-(\\d{2})-(\\d{2})", 1));
+
     }
 
     // 中文日期转换为英文日期
@@ -62,6 +80,19 @@ public class Test01 {
         } catch (ParseException e) {
             return cnStr;
         }
+    }
+
+    // 正则提取字符串中的子串，可指定提取第n个
+    public static String getRegexStr(String str, String regex, Integer n){
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(str);
+        List<String> list = new ArrayList<>();
+        // 除了以下写法，其它写法都不对
+        while (matcher.find()){
+            list.add(matcher.group());
+        }
+        //System.out.println(list);
+        return list.get(n);
     }
 
 
